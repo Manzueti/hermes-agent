@@ -2886,7 +2886,11 @@ async def get_models_analytics(days: int = 30):
 import re
 import asyncio
 
-from hermes_cli.pty_bridge import PtyBridge, PtyUnavailableError
+try:
+    from hermes_cli.pty_bridge import PtyBridge, PtyUnavailableError
+except ImportError:
+    PtyBridge = None
+    class PtyUnavailableError(RuntimeError): pass
 
 _RESIZE_RE = re.compile(rb"\x1b\[RESIZE:(\d+);(\d+)\]")
 _PTY_READ_CHUNK_TIMEOUT = 0.2
